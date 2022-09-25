@@ -1,7 +1,9 @@
 name: build and test
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -29,3 +31,19 @@ jobs:
         with:
           name: build
           path: build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: production
+      url: http://gazi-github-actions-test.surge.sh
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: build
+      - name: Deploy to Surge
+        run: npm surge -project '.' -domain gazi-github-actions-test.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}

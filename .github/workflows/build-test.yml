@@ -43,7 +43,7 @@ jobs:
         with:
           name: build
       - name: Deploy to Surge
-        run: npm surge -project '.' -domain gazi-github-actions-test.surge.sh
+        run: npx surge --project '.' --domain gazi-github-actions-test.surge.sh
         env:
           SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
